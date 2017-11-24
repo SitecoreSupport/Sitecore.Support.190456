@@ -171,10 +171,9 @@
     {
       Assert.ArgumentNotNull(view, "view");
       Assert.ArgumentNotNull(formModel, "formModel");
-      formModel.Results = (from x in from x in view.Sections select x.Fields
-                           select ((IFieldResult)x).GetResult() into x
-                           where (x != null) && (x.Value != null)
-                           select x).ToList<ControlResult>();
+      formModel.Results = view.Sections.SelectMany(x => x.Fields)
+        .Select(x => ((IFieldResult)x).GetResult())
+        .Where(x => x != null && x.Value != null).ToList();
     }
   }
 }
